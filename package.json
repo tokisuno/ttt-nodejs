@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/tokisuno/ttt-nodejs/issues"
   },
-  "homepage": "https://github.com/tokisuno/ttt-nodejs#readme"
+  "homepage": "https://github.com/tokisuno/ttt-nodejs#readme",
+  "dependencies": {
+    "prompt-sync": "^4.2.0"
+  }
 }
