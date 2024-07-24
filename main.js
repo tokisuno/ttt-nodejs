@@ -27,6 +27,8 @@ function Gameboard() {
 }
 
 function Game() {
+    this.state = true;;
+
     this.validInput = function (p1, p2, string) {
         string.split(""); 
         if (string.length !== 3) return false;
@@ -77,13 +79,6 @@ function Game() {
         game.displayBoard(board);
     }
 
-    this.checkWinCondition = function(mark) {
-        // placeholder
-        console.log(mark);
-        let count = 0;
-        return count;
-    }
-
     this.displayBoard = function(board) {
         console.clear();
         for (let i = 0; i < board.length; ++i) {
@@ -100,8 +95,6 @@ function Game() {
 }
 
 // game loop
-let run = true;
-
 let player1 = new Player("lucas", "X");
 let player2 = new Player("ash", "O");
 
@@ -111,9 +104,6 @@ let board = new Gameboard();
 game.displayBoard(board);
 game.displayScore(player1, player2);
 
-while (run) {
-    if (player1.moves.length >= 3) {
-        game.checkWinCondition(player1.mark); 
-    }
+while (game.state) {
     game.move();
 }
