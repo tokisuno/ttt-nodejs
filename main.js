@@ -16,14 +16,24 @@ function Player(name, mark) {
     this.won = false;
     this.win = function() { 
         this.score++; 
-        game.score(player1, player2);
         game.main = false;
         game.cont = true;
     };
+    this.tie = function() { 
+        console.log("Tie game!");
+        game.main = false;
+        game.cont = true;
+    };
+
     this.checkForWin = function() {
         const length = board.length - 1;
         let count = 0;
         let playerMoves = JSON.stringify(this.moves);
+
+        if (player1.moves.length === 5 && player2.moves.length === 4) {
+            this.tie();
+        }
+
         // horizontal 
         for (let row = 1; row <= length; row++) {
             for (let col = 1; col <= length; col++) {
@@ -48,27 +58,21 @@ function Player(name, mark) {
                         this.win()
                         break;
                     }
-                    console.log(coord, count);
                 } else { count = 0; break; };
             }
             count = 0;
         }
 
         // corner cases (cross)
-        if (
-            playerMoves.indexOf(JSON.stringify([1,1])) != -1 &&
+        if (playerMoves.indexOf(JSON.stringify([1,1])) != -1 &&
             playerMoves.indexOf(JSON.stringify([2,2])) != -1 &&
-            playerMoves.indexOf(JSON.stringify([3,3])) != -1 
-        ) {
-            this.win()
-        } else if 
-        (
-            playerMoves.indexOf(JSON.stringify([1,3])) != -1 &&
-            playerMoves.indexOf(JSON.stringify([2,2])) != -1 &&
-            playerMoves.indexOf(JSON.stringify([3,1])) != -1 
-        ) {
-            this.win()
-        }
+            playerMoves.indexOf(JSON.stringify([3,3])) != -1) {
+            this.win();
+        } else if (playerMoves.indexOf(JSON.stringify([1,3])) != -1 &&
+                   playerMoves.indexOf(JSON.stringify([2,2])) != -1 &&
+                   playerMoves.indexOf(JSON.stringify([3,1])) != -1) {
+            this.win();
+        } 
     }
 }
 
@@ -80,7 +84,6 @@ function Gameboard() {
 }
 
 function Game() {
-
     this.main = true;
     this.cont = false;
     this.validInput = function (string) {
@@ -165,16 +168,17 @@ function Game() {
 }
 
 // game loop
+console.clear();
 let player1 = new Player(prompt("Player 1, what is your name?: "), "X");
 let player2 = new Player(prompt("Player 2, what is your name?: "), "O");
 
 let game = new Game(player1, player2);
 let board = new Gameboard();
 
+
 game.displayBoard(board);
 
 function loop(main, cont) {
-    game.displayBoard;
     if (main === true && cont === false) {
         while (game.main) {
             game.move();
@@ -184,6 +188,7 @@ function loop(main, cont) {
     }
 
     if (main === false && cont === true) {
+        game.score(player1, player2);
         while (game.cont) {
             let answer = prompt("Continue? [y/n]: ");
             switch (answer) {
@@ -193,12 +198,13 @@ function loop(main, cont) {
                     player1.moved = false;
                     player2.moved = true;
                     board = new Gameboard(); 
-                    game.displayBoard;
+                    console.clear();
+                    game.displayBoard(board);
                     game.main = true;
                     game.cont = false;
                     break;
                 case "n":
-                    console.log("bye!");
+                    console.log("Tot de volgende keer! Tot ziens!");
                     return game.loop = false;
             }
         }
